@@ -42,16 +42,6 @@ async function ocrSpace(image) {
   }
 }
 
-plateRouter.get('/', async (req, res) => {
-  const variable = process.env.API_KEY_TESTE;
-
-  try {
-    res.send(variable);
-  } catch (error) {
-    res.send('Error')
-  }
-});
-
 // Rota para obter todas as placas
 plateRouter.get('/plates/all', async (req, res) => {
   try {
