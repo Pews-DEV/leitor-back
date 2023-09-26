@@ -43,9 +43,10 @@ async function ocrSpace(image) {
 }
 
 plateRouter.get('/', async (req, res) => {
+  const variable = process.env.API_KEY_TESTE;
+
   try {
-    console.log(process.env.API_KEY_TESTE)
-    res.send(process.env.API_KEY_TESTE);
+    res.send(variable);
   } catch (error) {
     res.send('Error')
   }
