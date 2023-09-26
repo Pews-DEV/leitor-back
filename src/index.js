@@ -16,4 +16,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(plateRouter);
 
-app.listen(8080);
+app.listen(8080, () => {
+  logger.info('Server started on port 8080');
+});
