@@ -1,0 +1,47 @@
+# Dependências
+node_modules/
+
+# Arquivos de build
+dist/
+build/
+out/
+
+# Arquivos temporários
+.tmp/
+.temp/
+.cache/
+
+# Logs e saída de debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Ficheiros de configuração
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env*.local
+
+# Ficheiros de configuração do IDE
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swo
+*.swp
+.DS_Store
+Thumbs.db
+
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Cache do npm
+.npm
