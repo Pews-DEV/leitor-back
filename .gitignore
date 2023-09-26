@@ -1,57 +1,9 @@
-<<<<<<< HEAD
-# Dependências
-node_modules/
-
-# Arquivos de build
-dist/
-build/
-out/
-
-# Arquivos temporários
-.tmp/
-.temp/
-.cache/
-
-# Logs e saída de debug
-=======
 # Logs
 logs
->>>>>>> 940be7c9d6c0e36de89c9e1b237bfc94a50dd30f
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-<<<<<<< HEAD
-.pnpm-debug.log*
-lerna-debug.log*
-
-# Ficheiros de configuração
-.env
-.env.local
-.env.development
-.env.test
-.env.production
-.env*.local
-
-# Ficheiros de configuração do IDE
-.idea/
-.vscode/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.swo
-*.swp
-.DS_Store
-Thumbs.db
-
-tsconfig.tsbuildinfo
-*.tsbuildinfo
-
-# Cache do npm
-.npm
-=======
 lerna-debug.log*
 .pnpm-debug.log*
 
@@ -176,4 +128,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
->>>>>>> 940be7c9d6c0e36de89c9e1b237bfc94a50dd30f
