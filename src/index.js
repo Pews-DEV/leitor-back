@@ -16,5 +16,5 @@ app.use(express.json());
 app.use(plateRouter);
 
 app.listen(8080, () => {
-  logger.info('Server started on port 8080');
+  console.log('Server running in 8080')
 });
