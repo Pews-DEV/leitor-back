@@ -44,8 +44,8 @@ async function ocrSpace(image) {
 
 plateRouter.get('/', async (req, res) => {
   try {
-    await mongoose.connect(process.env.DB_STR_CON);
-    res.send('Sucesso');
+    console.log(process.env.API_KEY_TESTE)
+    res.send(process.env.API_KEY_TESTE);
   } catch (error) {
     res.send('Error')
   }
