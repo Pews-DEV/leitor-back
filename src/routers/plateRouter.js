@@ -43,7 +43,12 @@ async function ocrSpace(image) {
 }
 
 plateRouter.get('/', async (req, res) => {
-  res.send('Funcionando');
+  try {
+    await mongoose.connect(process.env.DB_STR_CON);
+    res.send('Sucesso');
+  } catch (error) {
+    res.send('Error')
+  }
 });
 
 // Rota para obter todas as placas
