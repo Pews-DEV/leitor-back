@@ -1,3 +1,4 @@
+require('dotenv').config();
 const axios = require('axios');
 const FormData = require('form-data');
 const express = require('express');
@@ -5,6 +6,7 @@ const mongoose = require('mongoose');
 const plate = require('../models/plate');
 
 const plateRouter = express.Router();
+const DB_CON = "mongodb+srv://pedrosilvaifce:b2QG47sKltk3VHO1@cluster0.dynogvw.mongodb.net/?retryWrites=true&w=majority"
 
 // Função para fazer o reconhecimento de caracteres (OCR)
 async function ocrSpace(image) {
@@ -45,7 +47,7 @@ async function ocrSpace(image) {
 // Rota para obter todas as placas
 plateRouter.get('/plates/all', async (req, res) => {
   try {
-    await mongoose.connect(process.env.DB_STR_CON);
+    await mongoose.connect(DB_CON);
     const platesSearched = await plate.find();
     res.json({ plates: platesSearched });
   } catch (error) {
@@ -60,7 +62,7 @@ plateRouter.post('/cadastroPlaca', async (req, res) => {
     const data_plate = await ocrSpace(image);
     const plate_number = data_plate.ParsedResults[0].ParsedText.replace('\r\n', '').replace(/[^a-zA-Z0-9]/g, '');
 
-    await mongoose.connect(process.env.DB_STR_CON);
+    await mongoose.connect(DB_CON);
     await plate.create({ city: city, plate_number: plate_number, date: "15/02/2023 10:50" });
     res.json({ mensagem: 'Cadastro realizado' });
   } catch (error) {
