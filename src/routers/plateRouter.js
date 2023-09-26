@@ -3,7 +3,6 @@ const FormData = require('form-data');
 const express = require('express');
 const mongoose = require('mongoose');
 const plate = require('../models/plate');
-const dotenv = require('dotenv').config();
 
 const plateRouter = express.Router();
 

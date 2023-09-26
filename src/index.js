@@ -1,7 +1,7 @@
-const express = require('express');
-const app = express();
-const plateRouter = require('./src/routers/plateRouter');
 require('dotenv').config();
+const express = require('express');
+const plateRouter = require('./routers/plateRouter');
+const app = express();
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
