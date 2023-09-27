@@ -31,7 +31,7 @@ async function ocrSpace(image) {
       method: "POST",
       url: "https://api.ocr.space/parse/image",
       headers: {
-        apikey: "K87082705488957", // Coloque sua chave aqui
+        apikey: "K87082705488957",
         ...formData.getHeaders(),
       },
       data: formData,
