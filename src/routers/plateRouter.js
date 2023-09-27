@@ -1,17 +1,16 @@
 require("dotenv").config();
-const axios = require("axios");
-const FormData = require("form-data");
+const DB_CON = process.env.DB_STR_CON;
 const express = require("express");
+const axios = require("axios");
+
+const FormData = require("form-data");
 const mongoose = require("mongoose");
 const PDFDocument = require("pdfkit");
 const { PassThrough } = require('stream');
-const fs = require("fs");
-const path = require("path");
-
-const plate = require("../models/plate");
 
 const plateRouter = express.Router();
-const DB_CON = process.env.DB_STR_CON;
+
+const plate = require("../models/plate");
 
 // Função para fazer o reconhecimento de caracteres (OCR)
 async function ocrSpace(image) {
