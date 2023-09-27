@@ -11,8 +11,7 @@ const path = require("path");
 const plate = require("../models/plate");
 
 const plateRouter = express.Router();
-const DB_CON =
-  "mongodb+srv://pedrosilvaifce:b2QG47sKltk3VHO1@cluster0.dynogvw.mongodb.net/?retryWrites=true&w=majority";
+const DB_CON = process.env.DB_STR_CON;
 
 // Função para fazer o reconhecimento de caracteres (OCR)
 async function ocrSpace(image) {
