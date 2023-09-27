@@ -12,7 +12,6 @@ const plateRouter = express.Router();
 
 const plate = require("../models/plate");
 
-// Função para fazer o reconhecimento de caracteres (OCR)
 async function ocrSpace(image) {
   try {
     const formData = new FormData();
@@ -48,7 +47,6 @@ async function ocrSpace(image) {
   }
 }
 
-// Rota para obter todas as placas
 plateRouter.get("/plates/all", async (req, res) => {
   try {
     await mongoose.connect(DB_CON);
@@ -79,13 +77,11 @@ plateRouter.get("/plate/:placa", async (req, res) => {
   }
 });
 
-// Middleware para adicionar a data atual
 function addCurrentDate(req, res, next) {
-  req.body.date = new Date().toLocaleString(); // Obtém a data atual no formato desejado
-  next(); // Chama o próximo middleware na cadeia ou a rota principal
+  req.body.date = new Date().toLocaleString();
+  next();
 }
 
-// Rota para cadastrar uma nova placa com o middleware addCurrentDate
 plateRouter.post("/cadastroPlaca", addCurrentDate, async (req, res) => {
   try {
     const { city, image, date } = req.body;
@@ -99,7 +95,7 @@ plateRouter.post("/cadastroPlaca", addCurrentDate, async (req, res) => {
     await plate.create({
       city: city,
       plate_number: plate_number,
-      date: date, // Usar a data fornecida pelo middleware
+      date: date,
       image: image,
     });
     res.json({ mensagem: "Cadastro realizado" });
@@ -123,28 +119,21 @@ plateRouter.get('/plates/report', async (req, res) => {
       });
     }
 
-    // Crie um documento PDF em memória
     const doc = new PDFDocument();
-
-    // Configurar o cabeçalho do PDF
     doc.fontSize(16).text('Relatório de Placas', { align: 'center' }).moveDown();
 
-    // Preencha o conteúdo do PDF com as informações das placas
     allPlates.forEach((plateInfo) => {
       doc.text(`Placa: ${plateInfo.plate_number}`);
       doc.moveDown();
     });
 
-    // Configurar o cabeçalho para o navegador entender que estamos enviando um PDF
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=placas_report.pdf');
 
-    // Crie um fluxo de leitura para o PDF em memória
     const pdfStream = new PassThrough();
     doc.pipe(pdfStream);
     doc.end();
 
-    // Envie o PDF diretamente para o cliente
     pdfStream.pipe(res);
 
   } catch (error) {
