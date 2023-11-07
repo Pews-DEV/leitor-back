@@ -1,7 +1,10 @@
 require("dotenv").config();
 const DB_CON = process.env.DB_STR_CON;
 const express = require("express");
+
 const axios = require("axios");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const FormData = require("form-data");
 const mongoose = require("mongoose");
@@ -10,6 +13,7 @@ const { PassThrough } = require('stream');
 
 const plateRouter = express.Router();
 
+const User = require('../models/user');
 const plate = require("../models/plate");
 
 async function ocrSpace(image) {
@@ -47,7 +51,81 @@ async function ocrSpace(image) {
   }
 }
 
-plateRouter.get("/plates/all", async (req, res) => {
+function verifyToken(req, res, next) {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(403).json({ mensagem: 'Token não fornecido' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, 'chave_secreta'); // Use a mesma chave secreta usada para criar o token
+
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ mensagem: 'Token inválido' });
+  }
+}
+
+function addCurrentDate(req, res, next) {
+  req.body.date = new Date().toLocaleString();
+  next();
+}
+
+plateRouter.post('/cadastro', async (req, res) => {
+  try {
+    const { login, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10); // Criptografa a password
+
+    await mongoose.connect(DB_CON);
+    const user = await User.create({ login, password: hashedPassword });
+
+    const token = jwt.sign({ id: user._id, login: user.login }, 'chave_secreta', {
+      expiresIn: '1h' // Opcional: definir o tempo de expiração do token
+    });
+
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      mensagem: 'Erro durante o cadastro do usuário',
+      tipo: error,
+    });
+  }
+});
+
+
+plateRouter.post('/login', async (req, res) => {
+  try {
+    const { login, password } = req.body;
+
+    await mongoose.connect(DB_CON);
+    const user = await User.findOne({ login });
+
+    if (!user) {
+      return res.status(401).json({ mensagem: 'Credenciais incorretas' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ mensagem: 'Credenciais incorretas' });
+    }
+
+    const token = jwt.sign({ login: user.login }, 'chave_secreta');
+
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      mensagem: 'Erro durante o login',
+      tipo: error,
+    });
+  }
+});
+
+plateRouter.get("/plates/all", verifyToken, async (req, res) => {
   try {
     await mongoose.connect(DB_CON);
     const platesSearched = await plate.find();
@@ -59,7 +137,7 @@ plateRouter.get("/plates/all", async (req, res) => {
   }
 });
 
-plateRouter.get("/plate/:placa", async (req, res) => {
+plateRouter.get("/plate/:placa", verifyToken, async (req, res) => {
   try {
     await mongoose.connect(DB_CON);
     const plateNumber = req.params.placa;
@@ -77,12 +155,7 @@ plateRouter.get("/plate/:placa", async (req, res) => {
   }
 });
 
-function addCurrentDate(req, res, next) {
-  req.body.date = new Date().toLocaleString();
-  next();
-}
-
-plateRouter.post("/cadastroPlaca", addCurrentDate, async (req, res) => {
+plateRouter.post("/cadastroPlaca", verifyToken, addCurrentDate, async (req, res) => {
   try {
     const { city, image, date } = req.body;
     const data_plate = await ocrSpace(image);
@@ -106,8 +179,7 @@ plateRouter.post("/cadastroPlaca", addCurrentDate, async (req, res) => {
   }
 });
 
-
-plateRouter.get('/plates/report', async (req, res) => {
+plateRouter.get('/plates/report', verifyToken, async (req, res) => {
   try {
     await mongoose.connect(DB_CON);
     const allPlates = await plate.find();
