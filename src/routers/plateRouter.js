@@ -217,4 +217,18 @@ plateRouter.get('/plates/report', verifyToken, async (req, res) => {
   }
 });
 
+plateRouter.get('/tempo', async (req, res) => {
+  try {
+    const iotDeviceUrl = 'http://endereco-do-dispositivo-iot/tempo';
+    const response = await axios.get(iotDeviceUrl);
+
+    const tempo = response.data.tempo;
+
+    res.send(`Condição do tempo: ${tempo}`);
+  } catch (error) {
+    console.error('Erro ao obter dados do dispositivo IoT', error);
+    res.status(500).send('Erro interno do servidor');
+  }
+});
+
 module.exports = plateRouter;

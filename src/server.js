@@ -4,7 +4,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const plateRouter = require('./routers/plateRouter');
 
-const app = express(); // Defina o app antes de criar o servidor
+const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
@@ -25,10 +25,10 @@ app.post('/alerta', (req, res) => {
   res.json({ mensagem: 'Alerta enviado com sucesso' });
 });
 
-const PORT = 8080; // ou a porta que você desejar
+const PORT = 8080;
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-module.exports = app; // Exporte o app para os testes
+module.exports = app; 
